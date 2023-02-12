@@ -1,0 +1,21 @@
+# Configuration file
+---
+# HTTP archive bigquery table names
+summary_requests_table_small: httparchive.sample_data.summary_requests_desktop_10k
+summary_requests_table_full: httparchive.summary_requests.2023_01_01_desktop
+summary_pages_table_small: httparchive.sample_data.summary_pages_desktop_10k
+summary_pages_table_full: httparchive.summary_pages.2023_01_01_desktop
+technologies_table_small: httparchive.technologies.2022_01_01_desktop
+technologies_table_full: httparchive.technologies.2023_01_01_desktop
+
+# List of third-party request locations
+third_parties:
+  - googleads.g.doubleclick.net
+  - googleadservices.com
+  - googletagservices.com
+  - pagead2.googlesyndication.com
+  - securepubads.g.doubleclick.net
+  - stats.g.doubleclick.net
+
+# End configuration
+...
