@@ -1,2 +1,7 @@
 data/*
 sql/queries/*
+.R*
+*.swp
+fonts/*
+outputs/*
+reports/build/*

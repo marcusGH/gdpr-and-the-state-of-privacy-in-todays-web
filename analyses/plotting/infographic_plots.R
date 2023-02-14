@@ -5,19 +5,12 @@ library(magrittr)
 library(tibble)
 library(ggplot2)
 library(rprojroot)
-
-# library(eurostat)
-# library(sf)
-# library(ggthemes)
 library(scales)
-# library(ggthemes)
 library(tidyverse)
 library(urbnthemes)
 library(waffle)
 
 library(showtext)
-
-# TODO: import dataset here ....
 
 root <- find_root(has_file("README.md"))
 df <- read.csv(here(root, "data", "gdpr_compliancy_data_full.csv"))
@@ -49,7 +42,7 @@ options(scipen=10000)
 #   num_unique_pages_with_cookie_compliance  = B + C
 #   num_unique_pages                         = A + B + C + D
 # divide all the numbers by this value
-quantity = 10000
+quantity = 50000
 tibble(df) %>%
   mutate(D = num_unique_pages_with_google_ads - num_unique_pages_legal_google_ads) %>%
   mutate(B = num_unique_pages_with_cookie_compliance - num_unique_pages_legal_google_ads) %>%
@@ -59,7 +52,7 @@ tibble(df) %>%
   summarise(`Cookie consent banner, but no Google ads` = sum(D) / quantity,
             `Google ads with consent` = sum(C) / quantity,
             `Google ads without consent` = sum(B) / quantity,
-            `No cookie consent banner and no Google ads` = sum(A) / quantity) %>%
+            `No consent banner and no Google ads` = sum(A) / quantity) %>%
   mutate(ignore = 1) %>%
   pivot_longer(cols = !ignore) %>%
   select(name, value) -> waffle_data
@@ -74,21 +67,25 @@ font.add("Lato",
          bolditalic = here("fonts", "Lato-BoldItalic.ttf"))
 setEPS()
 postscript(here(root, "outputs", "internet_waffle.eps"),
-           width = 8,
+           width = 10,
            height = 20)
 showtext.begin()
+
 
 # create the plot
 waffle_data %>%
   ggplot(aes(fill=name, values=value)) +
+  # uncount(ceiling(value)) %>%
+  # waffle_iron(aes_d(group = name)) %>%
+  # ggplot(aes(x, y, fill = group)) +
   geom_waffle(
-    # size = 1,
+    size = .2,
     n_rows = 10,
     flip = TRUE,
-    # radius = unit(1, "pt"),
-    height = 5,
-    width = 5,
-  ) #+
+    radius = unit(.5, "pt"),
+    height = 0.6,
+    width = 0.6,
+  )  +
   # facet_wrap(~location, nrow = 1, strip.position = "bottom") +
   scale_fill_manual(
     values = c(alpha("#000000", 1), alpha("#d2d2d2", 1), "#fdbf11", alpha("#1696d2", 1))
@@ -102,8 +99,8 @@ waffle_data %>%
   coord_equal() +
   labs(
     title = "The Websites of the Internet,",
-    subtitle = "Seperated by Their Use of Advertisements\n and Cookie Compliance Banners",
-    x = "1 square = 10 000 websites",
+    subtitle = "Seperated by Their Use of Ads\n and Cookie Compliance Banners",
+    x = "1 square = 50 000 websites",
     y = ""
   ) +
   theme_minimal(base_family = "Lato") +
@@ -115,7 +112,13 @@ waffle_data %>%
     legend.position = "bottom",
     legend.spacing.x = unit(0, "cm"),
     legend.spacing.y = unit(3, "cm"),
-    plot.title.position = "plot"
+    plot.title.position = "plot",
+    # font sizes. The only way to scale the boxes is to
+    # set the scale when including the graphic into latex, and
+    # then increasing the font size to counteract this caling
+    text = element_text(size = 12 * 1/.35),
+    plot.title = element_text(size = 18 * 1/.35),
+    plot.subtitle = element_text(size = 14 * 1/.35),
   ) +
   guides(fill = guide_legend(
     title = "",
@@ -129,3 +132,5 @@ dev.off()
 # TODO: make this for the total number of websites instead
 # Then make proportion bar plot comparing the three categories of websites to highlight proportions
 # also, with cateogires: EU-country, other-country TLD, international, other
+
+(15.7 + 2.61) / (15.7 + 2.61 + 23.7 + 211)

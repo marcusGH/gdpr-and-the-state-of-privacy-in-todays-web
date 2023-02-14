@@ -11,6 +11,11 @@ Overview of project, brief introduction to dataset, due to size, stored in Googl
 
 ### Requirements
 
+* The `R` packages found in [`install_requirements.R`](install_requirements.R)
+* [Lato font pack](https://fonts.google.com/specimen/Lato)
+
+
+
 Required R packages:, API key, instructions on setting up
 
 **Acquiring a Google BigQuery billing key**
@@ -36,3 +41,28 @@ TODO
 
 
 Set your working directory to the root of the project.
+
+
+## Discussion
+
+Focus on websites using Google AdSense to deliver ads on their website
+According to
+[Google's AdSense Help site](https://support.google.com/adsense/answer/9007336?hl=en-GB),
+both personalised and non-personalised advertisements requires the user's consent if
+the website is hosted in a
+[ePrivacy Directive](https://en.wikipedia.org/wiki/Privacy_and_Electronic_Communications_Directive_2002)-particpating
+country. Therefore, websites found by the `httparchive` to use this technology should also
+employ a Cookie Banner to acquire the user's consent. Otherwise, they would be violating these
+rules.
+
+
+
+https://www.cookiechoices.org/intl/en-GB/ needed?
+https://ads.google.com/intl/en_uk/home/faq/gdpr/
+
+## Blocklist
+
+Could use
+https://github.com/nickspaargaren/no-google
+
+but covers to many, rather a few and 

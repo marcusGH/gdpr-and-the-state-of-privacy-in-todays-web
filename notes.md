@@ -95,3 +95,33 @@ CONTAINS_SUBSTR(req.url, "stats.g.doubleclick.net")
 SELECT pageid, rank, page_url, tld, has_cookie_compliance, is_third_party, request_url FROM request_site_data
 where tld = 'no'
 order by is_third_party DESC, has_cookie_compliance DESC
+
+
+
+All data collected by httparchive
+from requests made between 1. january 2023 and 16. january 2023 (first two weeks of January)
+
+# Why GoogleAds
+
+```
+  with ads as (
+      select category, app from 
+      `httparchive.technologies.2018_01_01_desktop`
+      where category = 'Advertising Networks'
+      )
+
+select app, count(0)
+  from ads
+  group by app
+```
+
+
+https://arxiv.org/pdf/1808.05096.pdf
+https://github.com/RUB-SysSec/we-value-your-privacy
+
+
+
+gdpr: https://gdpr.eu/article-7-how-to-get-consent-to-collect-personal-data/
+
+
+## Plotting
