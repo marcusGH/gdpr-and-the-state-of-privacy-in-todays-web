@@ -1,17 +1,17 @@
-library(here)
 library(dplyr)
-library(tidyr)
-library(magrittr)
-library(tibble)
+library(eurostat)
 library(ggplot2)
+library(here)
+library(magrittr)
 library(rprojroot)
 library(scales)
+library(showtext)
+library(tibble)
+library(tidyr)
 library(tidyverse)
 library(urbnthemes)
 library(waffle)
-library(eurostat)
-
-library(showtext)
+library(yaml)
 
 root <- find_root(has_file("README.md"))
 df <- read.csv(here(root, "data", "gdpr-compliancy-data-full.csv"))
@@ -71,7 +71,7 @@ postscript(here(root, "outputs", "internet-waffle.eps"),
 # open the device
 showtext.begin()
 
-# We import the graphic in latex with scale .35
+# We import the graphic in latex with scale .33
 # Needed later when setting the font size
 latex_scaling <- .33
 

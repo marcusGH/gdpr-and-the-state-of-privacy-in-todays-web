@@ -98,7 +98,7 @@ create_gdpr_compliancy_query <- function(filename, full = FALSE) {
   
   # Process the SQL template with these parameters
   process_sql_template(
-    template_path=here(proj_root, "sql", "templates", "gdpr_compliancy_by_country_time_template.sql"),
+    template_path=here(proj_root, "sql", "templates", "gdpr-compliancy-by-country-time-template.sql"),
     save_path=here(proj_root, "sql", "queries", filename),
     params=params
   )

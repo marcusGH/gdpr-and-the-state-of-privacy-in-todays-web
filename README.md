@@ -1,6 +1,16 @@
-# Title
+# Do EU Websites Care About Your Consent?
 
 TODO: Overview of project, brief introduction to dataset, due to size, stored in Google BigQuery and access through an R api
+
+TODO: ToC
+
+To reproduce the [infographic](01725740-submission.pdf), do the following:
+1. Make sure yours system satisfies all the [requirements](#Requirements), including a Google BigQuery billing key.
+2. Fetch the data used for analysis by following the steps in [Fetching the data](#Fetching-the-data).
+3. Produce the plots and compile the infographic by following the steps in [Producing the plots and infographics](#Producing-the-plots-and-infographics).
+
+## Overview of dataset
+
 
 The infographic is based on the following 3 tables from the [HTTP Archive](https://httparchive.org/):
 
@@ -97,10 +107,58 @@ rules.
 https://www.cookiechoices.org/intl/en-GB/ needed?
 https://ads.google.com/intl/en_uk/home/faq/gdpr/
 
-## Blocklist
+## Configuration
 
-Could use
-https://github.com/nickspaargaren/no-google
+To perform the same analysis as above on a different temporal snapshot of the
+web, e.g. in 2017 before the GDPR became enforceable, you can change the tables
+used in [`config.yaml`](config.yaml). The `full` tables are the ones that are
+used for the analysis. The `small` tables are used for testing as querying
+these costs far less BigQuery credits to be billed. To see the list of dates
+available for the different tables, you can run the following after setting up
+your billing key:
 
-but covers to many, rather a few and 
+```R
+library(bigrquery)
+library(DBI)
 
+con <- dbConnect(
+  bigrquery::bigquery(),
+  project = "httparchive",
+  dataset = "summary_requests", # or "summary_pages", or "technologies"
+  billing = getOption("bigquery_billing_ID")
+)
+dbListTables(con)
+```
+
+The `third_parties` key in [`config.yaml`](config.yaml) specifies a list of
+substrings. If any HTTP requests is directed to a URL _containing_ any of
+these, it is marked as a `is_third_party` requests by the SQL query. Columns
+related to this attribute were not used in the final analysis. The default
+values were found by visiting various news-websites with
+[Ghostery](https://addons.mozilla.org/en-GB/firefox/addon/ghostery/) installed
+and noting down the origin of the third-party trackers.
+
+## Methodology
+
+The aim of this project was to investigate and tell a story related to how GDPR is not always
+complied with in countries where it is a legal requirement. To do this, a lot of care needs to
+be taken to ensure that what is counted as GDPR violation, really is such a violation.
+To do this we should only count instances where we can:
+1. Ensure the requested website needs to follow the GDPR
+2. Ensure the requested website uses cookies beyond those strictly necessary, and without consent
+The first point is satisfied by only considering traffic directed to websites
+with a top-level-domain of a EU member state, as this ensures the website is
+_based_ in a GDPR-compliant country. We note that violations might also occur
+for international websites, but we do not count these as we do not want to
+count non-violation instances incorrectly.
+To meet the second point, we use the HTTP Archive's `technologies` table to
+check whether a website uses a cookie compliance banner and if the website uses
+Google AdSense to deliver advertisements. Google AdSense was chosen because
+(i) it is the most widely used technology for delivering online ads and (ii)
+it requires cookie consent for both personalised and non-personalised ads:
+
+> Although non-personalised ads don’t use cookies or mobile ad identifiers for ad targeting, they do still use cookies or mobile ad identifiers for frequency capping, aggregated ad reporting and to combat fraud and abuse. Therefore, you must obtain consent to use cookies for those purposes where legally required, per the ePrivacy Directive in certain EEA countries.
+
+Source: [Google AdSense Help personalised and non-personalised ads](https://support.google.com/adsense/answer/9007336)
+
+Despite the above measures being taken, we still note that the HTTP Archive's list of Cookie Consent banners might be lacking, in which case the violation count might be higher than it should be.

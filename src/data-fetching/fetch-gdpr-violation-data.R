@@ -1,6 +1,7 @@
 library(bigrquery)
 library(DBI)
 library(rprojroot)
+library(here)
 
 root_dir <- find_root(has_file("README.md"))
 source(here(root_dir, "src", "helper-functions", "sql-query-utils.R"))
@@ -38,7 +39,7 @@ write.csv(gdpr_table, here(root_dir, "data", "gdpr-compliancy-data-sample.csv"),
 # ============================
 
 # create the query
-create_gdpr_compliancy_query("gdpr-compliancy-query-sample.sql", full = TRUE)
+create_gdpr_compliancy_query("gdpr-compliancy-query-full.sql", full = TRUE)
 # parse query to R string
 sql <- parse_sql_query(here(root_dir, "sql", "queries", "gdpr-compliancy-query-full.sql"))
 print(paste0("SQL query: ", sql))
