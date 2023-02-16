@@ -19,7 +19,7 @@ Table of contents:
 <!-- vim-markdown-toc -->
 
 To reproduce the [infographic](01725740-submission.pdf), do the following:
-1. Make sure yours system satisfies all the [requirements](#Requirements), including a Google BigQuery billing key.
+1. Make sure your system satisfies all the [requirements](#Requirements), including a Google BigQuery billing key.
 2. Fetch the data used for analysis by following the steps in [Fetching the data](#Fetching-the-data).
 3. Produce the plots and compile the infographic by following the steps in [Producing the plots and infographics](#Producing-the-plots-and-infographics).
 
@@ -50,6 +50,33 @@ information.
 
 ## Repository overview
 
+* `analyses/`:
+  * `notebooks/`:
+    * Some exploratory data analysis
+  * `plotting/`:
+    * Two R scripts used to produce the final plots in the infographic
+* `data/`:
+  * Target location of data queried from Google BigQuery
+* `outputs/`:
+  * Target location of plots
+* `reports/`:
+  * Infographic latex source file
+* `sql/`:
+  * `queries/`:
+    * Target location of processed SQL queries
+  * `templates/`:
+    * Contains the main SQL query for fetching the data that will be analysed
+* `src/`:
+  * `data-fetching/`:
+    * R scripts for querying the HTTP Archive database stored on Google BigQuery
+  * `helper-functions/`:
+    * Utility R functions for helping with the above
+* `Makefile`:
+  * Used to compile the infographic
+* `config.yaml`:
+  * Used to configure the HTTP Archive tables used
+* `install-requirements.R`:
+  * Utility scripts for installing all the R packages required
 
 ## Requirements
 
