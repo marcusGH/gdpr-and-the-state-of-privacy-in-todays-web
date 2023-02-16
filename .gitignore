@@ -4,3 +4,5 @@ fonts/*
 fonts/
 outputs/*
 reports/build/*
+notes.md
+instructions.pdf
