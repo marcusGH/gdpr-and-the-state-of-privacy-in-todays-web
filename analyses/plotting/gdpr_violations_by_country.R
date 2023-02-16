@@ -146,7 +146,7 @@ gdpr_country_data %>%
     ) +
     labs(title = "     GDPR Violations by Country",
          y = NULL,
-         x = "Proportion of Internet Traffic") +
+         x = "Proportion of internet traffic") +
     theme_minimal(base_family = "Lato") +
     theme(
       plot.background = element_rect(fill = "transparent",

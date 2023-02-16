@@ -2,6 +2,8 @@
 
 Overview of project, brief introduction to dataset, due to size, stored in Google BigQuery and access through an R api
 
+TODO: Table of Contents
+
 ## Repository overview
 
 
@@ -70,11 +72,3 @@ https://github.com/nickspaargaren/no-google
 
 but covers to many, rather a few and 
 
-
-
-## Reflective summary
-
-guidelines not met:
-* Full-width graphics
-* figure number
-* bar charts, avoiding vertical grid lines, could add entries for EU average, all sites average and non-EU average, but could be misleading as these are not necesarily GDPR violations
