@@ -17,13 +17,13 @@ package:
 
 infographic: fonts
 	# make sure the csv is available, from which the plots are made
-	test -s data/gdpr_compliancy_data_full.csv || { echo "The GDPR compliancy data CSV was not found! Run the SQL query before attempting to build the infographic."; exit 1; }
+	test -s data/gdpr-compliancy-data-full.csv || { echo "The GDPR compliancy data CSV was not found! Run the SQL query before attempting to build the infographic."; exit 1; }
 	# create the plots
-	Rscript analyses/plotting/gdpr_violations_by_country.R
-	Rscript analyses/plotting/websites_of_the_internet.R
+	Rscript analyses/plotting/gdpr-violations-by-country.R
+	Rscript analyses/plotting/websites-of-the-internet.R
 	# convert the plots
-	inkscape --export-pdf=outputs/internet_waffle.pdf outputs/internet_waffle.eps
-	inkscape --export-pdf=outputs/gdpr_by_country.pdf outputs/gdpr_by_country.eps
+	inkscape --export-pdf=outputs/internet-waffle.pdf outputs/internet-waffle.eps
+	inkscape --export-pdf=outputs/gdpr-by-country.pdf outputs/gdpr-by-country.eps
 	# compile the infographic and move a copy it to root (lualatex needed for the fontenc package)
 	latexmk -pdf -lualatex -output-directory="reports/build/" -verbose -synctex=1 -shell-escape reports/infographic.tex
 	cp reports/build/infographic.pdf $(CID)-submission.pdf

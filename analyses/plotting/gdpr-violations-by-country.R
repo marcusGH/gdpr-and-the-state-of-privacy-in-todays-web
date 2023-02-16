@@ -13,7 +13,7 @@ library(eurostat)
 
 # read the data
 root <- find_root(has_file("README.md"))
-df <- read.csv(here(root, "data", "gdpr_compliancy_data_full.csv"))
+df <- read.csv(here(root, "data", "gdpr-compliancy-data-full.csv"))
 df$tld <- toupper(df$tld)
 
 # List of Top-level-domains (TLD) of all EU countries
@@ -67,7 +67,7 @@ font.add("Lato",
          italic = here("fonts", "Lato-Italic.ttf"),
          bolditalic = here("fonts", "Lato-BoldItalic.ttf"))
 setEPS()
-postscript(here(root, "outputs", "gdpr_by_country.eps"),
+postscript(here(root, "outputs", "gdpr-by-country.eps"),
            width = 17,
            height = 15)
 showtext.begin()

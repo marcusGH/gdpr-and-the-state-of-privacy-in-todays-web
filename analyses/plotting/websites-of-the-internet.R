@@ -14,7 +14,7 @@ library(eurostat)
 library(showtext)
 
 root <- find_root(has_file("README.md"))
-df <- read.csv(here(root, "data", "gdpr_compliancy_data_full.csv"))
+df <- read.csv(here(root, "data", "gdpr-compliancy-data-full.csv"))
 
 set_urbn_defaults(style="print")
 options(scipen=10000)
@@ -65,7 +65,7 @@ font.add("Lato",
          bolditalic = here(root, "fonts", "Lato-BoldItalic.ttf"))
 # we need to draw on this device
 setEPS()
-postscript(here(root, "outputs", "internet_waffle.eps"),
+postscript(here(root, "outputs", "internet-waffle.eps"),
            width = 10,
            height = 20)
 # open the device
