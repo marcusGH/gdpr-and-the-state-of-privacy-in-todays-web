@@ -13,7 +13,8 @@ clean:
 	cd ..
 
 package:
-	git ls-files
+	mdkr temp-package-dir
+	git ls-files | xargs cp -t temp-package-dir
 
 infographic: fonts
 	# make sure the csv is available, from which the plots are made

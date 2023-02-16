@@ -6,3 +6,4 @@ outputs/*
 reports/build/*
 notes.md
 instructions.pdf
+*.ipynb_checkpoints*
