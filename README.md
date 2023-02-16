@@ -1,8 +1,22 @@
 # Do EU Websites Care About Your Consent?
 
-TODO: Overview of project, brief introduction to dataset, due to size, stored in Google BigQuery and access through an R api
+This repository contains a reproducible report on the current state of
+cookie banners and advertisements on the web, focusing on traffic
+in GDPR-compliant countries.
 
-TODO: ToC
+Table of contents:
+<!-- vim-markdown-toc GFM -->
+
+* [Overview of dataset](#overview-of-dataset)
+* [Repository overview](#repository-overview)
+* [Requirements](#requirements)
+* [Acquiring a Google BigQuery billing key](#acquiring-a-google-bigquery-billing-key)
+* [Fetching the data](#fetching-the-data)
+* [Producing the plots and infographics](#producing-the-plots-and-infographics)
+* [Configuration](#configuration)
+* [Methodology](#methodology)
+
+<!-- vim-markdown-toc -->
 
 To reproduce the [infographic](01725740-submission.pdf), do the following:
 1. Make sure yours system satisfies all the [requirements](#Requirements), including a Google BigQuery billing key.
@@ -11,8 +25,13 @@ To reproduce the [infographic](01725740-submission.pdf), do the following:
 
 ## Overview of dataset
 
-
-The infographic is based on the following 3 tables from the [HTTP Archive](https://httparchive.org/):
+Researchers at the [HTTP Archive](https://httparchive.org/) "periodically crawl
+the top sites on the web and record detailed information about fetched
+resources, used web platform APIs and features, and execution traces of each
+page." The raw data is available through many different tables, all available
+on [Google BigQuery](https://github.com/HTTPArchive/httparchive.org/blob/main/docs/gettingstarted_bigquery.md).
+However, with the interest of this project being investigating GDPR compliant
+websites and Internet traffic, only the following 3 tables are considered:
 
 | Table Name                                        | Number of rows | Total logical bytes | Total physical bytes |
 | --                                                | --             | --                  | --                   |
@@ -20,12 +39,14 @@ The infographic is based on the following 3 tables from the [HTTP Archive](https
 | `httparchive.summary_requests.2023_01_01_desktop` | 1 187 819 093  | 1.37 TB             | 133.85 GB            |
 | `httparchive.technologies.2023_01_01_desktop`     | 229 667 717    | 12.91 GB            | 2.83 GB              |
 
-However, data from different snapshot dates can also easily be used by just changing the table names in [`config.yaml`](config.yaml). Since these tables are fairly large in size, it is recommended to query them using Google BigQuery instead of downloading them locally.
+Since these tables are fairly large in size, it is recommended to query them
+using Google BigQuery instead of downloading them locally, especially the `summary_requests` table.
 
-
-% TODO: table of the three tables, their sizes, and number of rows, quick explanation of why Big Query used
-
-TODO: Table of Contents
+The data of the above tables are from HTTP requests and websites recorded
+between January 1st 2023 and Januray 16th 2023. To perform the same analysis on
+a different data range, the table names can be changed in
+[`config.yaml`](config.yaml). Consult the [Configuration section](#configuration) for more
+information.
 
 ## Repository overview
 
@@ -89,24 +110,6 @@ Simply run `make infographic`. This will run the relevant R scripts to produce t
 * Convert the `.eps` files to `.pdf` using for example the `epstopdf` tool and save them in the `outputs/` folder with the same name
 * Compile the LaTeX document [`reports/infographic.tex`](reports/infographic.tex). This has to be done using a XeLaTeX or LuaLaTeX compiler. PDFLaTeX cannot be used because it does not support the `fontspec` package.
 
-
-## Discussion
-
-Focus on websites using Google AdSense to deliver ads on their website
-According to
-[Google's AdSense Help site](https://support.google.com/adsense/answer/9007336?hl=en-GB),
-both personalised and non-personalised advertisements requires the user's consent if
-the website is hosted in a
-[ePrivacy Directive](https://en.wikipedia.org/wiki/Privacy_and_Electronic_Communications_Directive_2002)-particpating
-country. Therefore, websites found by the `httparchive` to use this technology should also
-employ a Cookie Banner to acquire the user's consent. Otherwise, they would be violating these
-rules.
-
-
-
-https://www.cookiechoices.org/intl/en-GB/ needed?
-https://ads.google.com/intl/en_uk/home/faq/gdpr/
-
 ## Configuration
 
 To perform the same analysis as above on a different temporal snapshot of the
@@ -146,6 +149,7 @@ be taken to ensure that what is counted as GDPR violation, really is such a viol
 To do this we should only count instances where we can:
 1. Ensure the requested website needs to follow the GDPR
 2. Ensure the requested website uses cookies beyond those strictly necessary, and without consent
+
 The first point is satisfied by only considering traffic directed to websites
 with a top-level-domain of a EU member state, as this ensures the website is
 _based_ in a GDPR-compliant country. We note that violations might also occur
