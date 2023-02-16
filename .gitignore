@@ -3,5 +3,6 @@ sql/queries/*
 .R*
 *.swp
 fonts/*
+fonts/
 outputs/*
 reports/build/*

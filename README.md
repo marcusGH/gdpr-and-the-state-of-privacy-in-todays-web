@@ -43,6 +43,9 @@ TODO
 Set your working directory to the root of the project.
 
 
+Note: This query does a join on a 978 GB table and a 1 GB table, so it will use about 170 GB of Bigquery credits.
+
+
 ## Discussion
 
 Focus on websites using Google AdSense to deliver ads on their website
@@ -66,3 +69,12 @@ Could use
 https://github.com/nickspaargaren/no-google
 
 but covers to many, rather a few and 
+
+
+
+## Reflective summary
+
+guidelines not met:
+* Full-width graphics
+* figure number
+* bar charts, avoiding vertical grid lines, could add entries for EU average, all sites average and non-EU average, but could be misleading as these are not necesarily GDPR violations

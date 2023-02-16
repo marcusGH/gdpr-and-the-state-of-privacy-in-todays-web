@@ -1,17 +1,16 @@
 \documentclass[border=0mm]{article}
-% 20cm x 24cm
-\usepackage[paperheight=24cm,paperwidth=20cm,margin=.8cm,heightrounded]{geometry}
+% 20cm x 24cm infographic
+\usepackage[paperheight=24cm,paperwidth=20cm, left=.8cm, right=.8cm, top=1cm, bottom=0in, footskip=0in, ,heightrounded]{geometry}
 
-\usepackage[]{graphicx} 
-\usepackage[]{setspace} 
-% \usepackage[]{eso-pic} 
+\usepackage{graphicx} 
+\usepackage{setspace} 
 \usepackage[most]{tcolorbox} 
-
-\usepackage[]{float} 
-\usepackage[]{hyperref} 
+\usepackage{float} 
+\usepackage{hyperref} 
 \usepackage{xcolor} 
 \usepackage[12pt]{moresize} 
 \usepackage{array} 
+\usepackage{tikz} 
 
 % Lato font
 \usepackage[default]{lato}
@@ -34,11 +33,21 @@
 \definecolor{bg2}{RGB}{245,245,245}
 \definecolor{bg3}{RGB}{10,76,106}
 
+% For the light-blue box on the right
 \newtcolorbox{rightframe}[1][1]{
     enhanced,
     arc=0pt,
     outer arc=0pt,
     colback=bg,
+    boxrule=0pt,
+    #1
+}
+
+\newtcolorbox{references}[1][1]{
+    enhanced,
+    arc=0pt,
+    outer arc=0pt,
+    colback=col2,
     boxrule=0pt,
     #1
 }
@@ -53,86 +62,96 @@
 % Color adjustments
 \pagecolor{bg2}
 
-\usepackage{tikz} 
-
 \begin{document}
-% \AddToShipoutPictureBG*{%
-%     \AtPageLowerLeft{%
-%         \hspace*{.55\paperwidth}%
-%         \color{bg}%
-%         \rule{.45\paperwidth}{\paperheight}%
-%     }%
-% }%
+% ------------------------------------ document start --------------------
 
-% -----------------------------------  Heading ---------------------------------
+\pagenumbering{gobble}
+
+% -----------------------------------  Heading ---------------------------
 
 % Good ol' readable tikz graphics
 {\begin{tikzpicture}[remember picture,overlay]
     \node[yshift=-3cm] at (current page.north west)
     {\begin{tikzpicture}[remember picture, overlay]
         \draw[fill=bg3 ] (0,0) rectangle (\paperwidth,3cm);
-        \node[anchor=east,xshift=.9\paperwidth,yshift=.11\paperwidth]{\color{col4}
-        \HUGE \textbf{\uppercase{Do European websites }} };
+        \node[anchor=east,xshift=.8\paperwidth,yshift=.11\paperwidth]{\color{col4}
+        \HUGE \textbf{\uppercase{Do EU websites }} };
         \node[anchor=east,xshift=.96\paperwidth,yshift=.04\paperwidth]{\color{col4}
         \HUGE \textbf{\uppercase{care about your consent?}} };
     \end{tikzpicture}
     };
 \end{tikzpicture}}
 
+% To make the text not overlap with the heading
 \vspace*{50pt}
 
 % ---------------------------------- LEFT PANEL -------------------------
 
 \begin{minipage}{0.5\textwidth}
-\normalsize
+\small
+\vspace*{0.2cm}
 We have all seen the annoying ``This website uses cookies'' pop-up when visiting a website.
-Among the over 12 million websites on the internet, about 7\% sites has this banner, as we
-see in the waffle chart on the right. Ever since the General Data Protection Regulation (GDPR)
-became enforceable in May 2018, websites that target EU users or are based in an EU country
-need to get the user's consent before using cookies to track user activity. Otherwise, they
-risk being fined. However, do all European websites do this? One way to investigate this is to
-use the internet traffic data released by the HTTP archive every month. We focus
-% on traffic to websites with EU top-level-domains (e.g.\ .uk, .se, .dk, etc.) as we know for certain
-% these websites needs to comply with GDPR. Additionally, only cookies used by Google AdSense are
-considered as these require prior consent regardless of whether the ads are personalised or not.
-Traffic to websites not employing a cookie consent banner, but using Google AdSense, will then
-likely be violating GDPR. Below, we can see how well European countries do in terms of their
-traffic:
+Of the 13 million websites on the Internet, 10\% use such a cookie consent banner. Among
+websites hosted in EU countries, more than 22\% have this banner.
+This is due to the General Data Protection Regulation (GDPR), which
+applies to all websites targeting EU residents
+or are hosted in EU member states, that is, websites with a EU top-level-domain (TLD)
+such as ``.no''. To comply with the GDPR, these websites need to receive the users' consent
+before using any cookies except those strictly necessary$^\ddagger$. One common use of cookies is delivering
+personalised advertisements with Google AdSense, which almost 4\% of EU websites do.
+However, a significant amount of traffic is directed towards websites which do this without
+consent. Yet, the GDPR has had a noticeable positive effect in reducing this number when compared
+to websites hosted outside the EU.
 
-\includegraphics[trim = {2cm 0 0 0},scale=.23]{outputs/gdpr_by_country.pdf}
+\vspace*{.2cm}
 
-\textbf{Source:} httparchive
+\includegraphics[trim = {1cm 0 1cm 0},scale=.23]{outputs/gdpr_by_country.pdf}
 
-\textbf{Notes:} temst
+{\small\linespread{.1}\selectfont\fontsize{8pt}{.1cm}\selectfont
+\textbf{Source:} The HTTP Archive's web-page, technology and requests summaries.
 
-We see that Italy is the worst offender. However, all the EU countries still do better than
-the
+\textbf{Notes:} The data is based on approximately $10^9$ HTTP requests recorded by the HTTP Archive
+    between January 1st 2023 and January 16th 2023. Only the $\approx 1.9 \cdot 10^8$ requests
+    directed at websites with a EU top-level-domain (TLD) are considered, as these websites are
+    obliged to comply with the GDPR.
+    The HTTP Archive's technology dataset is used
+    to determine which websites use Google AdSense and cookie consent banners. As Google AdSense
+    requires consent to cookies for both personalised and non-personalised ads$^{\dagger}$,
+    GDPR violations are counted by considering the proportion of HTTP requests to each EU TLD that
+    is directed towards websites using Google AdSense without a cookie consent banner.
+\par}
 
+
+\begin{references}[width=1\textwidth,arc=10pt,auto outer arc]
 \textbf{References:}
 
-\href{https://support.google.com/adsense/answer/9007336}{\color{dark} Google AdSense Help on Personalised and non-personalised ads}
+$(\dagger)$ \href{https://support.google.com/adsense/answer/9007336}{\color{dark} Google AdSense Help on Personalised and non-personalised ads}
 
-\href{https://gdpr.eu/cookies/}{\color{dark} Cookies, the GDPR, and the ePrivacy Directive}
+$(\ddagger)$ \href{https://gdpr.eu/cookies/}{\color{dark} Cookies, the GDPR, and the ePrivacy Directive}
+\end{references}
 
 
 
-\end{minipage}%
+\end{minipage}% ------------------------------------------------------------------
 \begin{minipage}{0.05\textwidth}
-    \ssmall.
-    \\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\
+    \hspace{\fill}
 \end{minipage}
 % -----------------------  WEBSITES OF THE INTERNET ------------------------------
 \begin{minipage}{0.45\textwidth}
     \vspace*{.2cm}
 
     \begin{rightframe}[width=1.03\textwidth,arc=10pt,auto outer arc]
-    % \colorbox{bg2}%
-    {\includegraphics[trim = {2.5cm 0 2cm 0}, scale=.35]{outputs/internet_waffle.pdf}
+    {\includegraphics[trim = {2.5cm 0 2cm 0}, scale=.33]{outputs/internet_waffle.pdf}
     \newline
+    \vspace*{-.2cm}
 
-    {\small\linespread{.2}\selectfont \textbf{Source:} Website visits and
-        website technology usage tracked by the HTTP Archive between January 1st 2023
-        and January 16th 2023. \par} }
+    {\small\linespread{.2}\selectfont\fontsize{8pt}{.2cm}\selectfont
+        \textbf{Source:} The HTTP Archive's web-page, technology and requests summaries.
+
+        \textbf{Notes:} The data is based on $\approx 10^9$ HTTP requests and $\approx 10^7$
+        web-pages tracked between January 1st 2023 and January 16th 2023.
+        The HTTP Archive's technology dataset is used to determine web-page's use of
+        Cookie consent banners and Google AdSense.  \par} }
     \end{rightframe}
 \end{minipage}
 \end{document}
