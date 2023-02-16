@@ -19,7 +19,7 @@ df <- read.csv(here(root, "data", "gdpr-compliancy-data-full.csv"))
 set_urbn_defaults(style="print")
 options(scipen=10000)
 
-# The different categories can be seperates into 4 disjoint sets:
+# The different categories can be seperated into 4 disjoint sets:
 #  +-----------------------+
 #  |      /-----+-----\    |
 #  |  A  (  B / C \ D )    |

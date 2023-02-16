@@ -1,6 +1,33 @@
+-- ----- GDPR compliance by Country and Time SQL template -----
+-- This query returns a table with various aggregated statistics for each
+-- (year, month, tld) combination among the 1 billion requests tracked in
+-- the corresponding summary_requests table.
+-- 
+-- This is done by first creating
+-- a req_site table, which has an entry for each of the 1 billion requests and
+-- augments this with information about when the request happened (year, month) and
+-- whether the request is directed a third-party site such as Google Ads. It also
+-- adds various information about the website visited, such as its TLD.
+--
+-- Then a tech_site table is created, which contains a row for each unique website,
+-- identified by pageid. The summary_request table is joined with the technology table
+-- to determine which websites use a cookie consent banner and which websites employ
+-- Google AdSense, the most widely-used advertisement technology in today's web.
+--
+-- These two tables are then joined by their pageids, and the results are aggregated by
+-- various statistics that might be of interest, such as number of requests to websites
+-- with google ads, number of requests to pages with cookie banners, etc.. The COUNT DISTINCT
+-- IF statistics only look at website statistics, and could be moved to a different query, but
+-- I combine it with this one to reduce the BigQuery bills as I only have 1 TB available.
+-- The groupby tld is to ensure we can look at how these statistics vary from EU country to
+-- EU country.
+-- -----------------------------------------------------------------
+
+
+
 -- Construct a table with schema:
 --  --------------------------------------------------------------------------------------------------------
---  | pageid | rank | page_url | tld | has_cookie_compliance | request_url | is_third_party | year | month |
+--  | pageid | rank | page_url | tld | request_url | is_third_party | year | month |
 --  --------------------------------------------------------------------------------------------------------
 WITH req_site AS
 (SELECT
@@ -26,6 +53,7 @@ WITH req_site AS
         pages.pageid = req.pageid
 ),
 
+-- Construct a table with schema:
 --  --------------------------------------------------------------
 --  | pageid | page_url | use_google_ads | has_cookie_compliance |
 --  --------------------------------------------------------------
@@ -50,15 +78,20 @@ SELECT
     req_site.year,
     req_site.month,
     req_site.tld,
-    -- Request statistics
+    -- --- Request statistics ---
     COUNT(req_site.request_url) AS num_requests,
     COUNT(tech_site.has_cookie_compliance) AS num_cookie_compliance,
     COUNT(tech_site.use_google_ads) AS num_google_ads,
     COUNT(req_site.is_third_party) AS num_third_party,
+    -- Third party requests should need consent first
     COUNT(IF(tech_site.has_cookie_compliance AND req_site.is_third_party, TRUE, NULL)) AS num_legal_third_party,
+    -- Negation of the above
     COUNT(IF((tech_site.has_cookie_compliance IS NULL) AND req_site.is_third_party, TRUE, NULL)) AS num_gdpr_violations,
+    -- Need to ask for cookie consent before using google ads
     COUNT(IF(tech_site.use_google_ads AND (tech_site.has_cookie_compliance IS NULL), TRUE, NULL)) AS num_google_ads_violations,
-    -- Page statistics
+    -- --- Page statistics ---
+    -- these statistics are copies of the above, but the DISTINCT IF ensures they count
+    -- them across websites instead of across requests
     COUNT(DISTINCT req_site.pageid) AS num_unique_pages,
     COUNT(DISTINCT IF(tech_site.has_cookie_compliance AND req_site.is_third_party, req_site.pageid, NULL)) AS num_unique_pages_legal_third_party,
     COUNT(DISTINCT IF(tech_site.has_cookie_compliance AND tech_site.use_google_ads, req_site.pageid, NULL)) AS num_unique_pages_legal_google_ads,

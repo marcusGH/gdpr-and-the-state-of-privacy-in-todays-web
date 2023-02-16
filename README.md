@@ -58,15 +58,26 @@ key, you should do the following:
 
 ## Fetching the data
 
-TODO
+Run `src/data-fetching/fetch-gdpr-violation-data.R`
 
-fetch-gdpr-violation-data.R
+> :warning: **This code will execute an expensive query that joins a table with 1 billion rows with another table containing 1 million rows, so it will use about 170 GB of your Google BigQuery processing quota**: Make sure you have at least this much credit available in your billing key before running this code. :warning:
 
-> :warning: **This code will execute an expensive query that joins a table with 1 billion rows with another table containing 1 million rows, so it will use about 170 GB of your Google BigQuery processing quota**: Make sure you have at least this much credit available in your billing key before running this code.
+This will first inject the [`sql/templates/gdpr-compliancy-by-country-time-template.sql`](sql/templates/gdpr-compliancy-by-country-time-template.sql) query with the table names configured in [`config.yaml`](config.yaml). It will then parse the resulting query and make an API request to Google BigQuery with `bigrquery`. The resulting table is then saved as a `.csv` file in `data/`.
 
+For more documentation on how the SQL query works, see [`sql/templates/gdpr-compliancy-by-country-time-template.sql`](sql/templates/gdpr-compliancy-by-country-time-template.sql). Also note that not all the columns in the resulting csv were used, only the `tld, num_requests, num_cookie_compliance, num_google_ads, num_google_ads_violations, num_unique_pages, num_unique_pages_legal_google_ads, num_unique_pages_with_cookie_compliance` and `num_unique_pages_with_google_ads` are used.
 
-Set your working directory to the root of the project.
+## Producing the plots and infographics
 
+**Using the Makefile (recommended)**
+
+Simply run `make infographic`. This will run the relevant R scripts to produce the plots, and convert them into a format that's readable by LaTeX, and then compile the LaTeX file [`reports/infographic.tex`](reports/infographic.tex) and copy the resulting infographic into the project root directory.
+
+**Manually**
+
+* Make sure the Lato `.ttf` files are in the `fonts/` folder in the project root directory by following the requirements instructions.
+* Run [`analyses/plotting/gdpr-violations-by-country.R`](analyses/plotting/gdpr-violations-by-country.R) and [`analyses/plotting/websites-of-the-internet.R`](analyses/plotting/websites-of-the-internet.R) to create `.eps` files of the two visualisations in `outputs/`
+* Convert the `.eps` files to `.pdf` using for example the `epstopdf` tool and save them in the `outputs/` folder with the same name
+* Compile the LaTeX document [`reports/infographic.tex`](reports/infographic.tex). This has to be done using a XeLaTeX or LuaLaTeX compiler. PDFLaTeX cannot be used because it does not support the `fontspec` package.
 
 
 ## Discussion
