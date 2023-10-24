@@ -4,6 +4,8 @@ This repository contains a reproducible report on the current state of
 cookie banners and advertisements on the web, focusing on traffic
 in GDPR-compliant countries.
 
+![gdpr-poster-highres](https://github.com/marcusGH/gdpr-and-the-state-of-privacy-in-todays-web/assets/29378769/29eb21ff-1cc8-46a2-a2b3-249d3cfd2510)
+
 Table of contents:
 <!-- vim-markdown-toc GFM -->
 
